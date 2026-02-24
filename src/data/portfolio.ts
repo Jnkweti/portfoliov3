@@ -294,7 +294,8 @@ export const certifications: Certification[] = [
 	{
 		name: 'AWS Certified Solutions Architect - Associate',
 		issuer: 'Amazon Web Services',
-		dateEarned: '2024-01-01',
+		dateEarned: '2026-01-03',
+		expirationDate: '2029-01-03',
 		credentialUrl:
 			'https://www.credly.com/badges/8b235f8e-02c7-4971-89cf-16e0d6e11530/linked_in_profile',
 		sortOrder: 1,
@@ -302,7 +303,8 @@ export const certifications: Certification[] = [
 	{
 		name: 'AWS Certified Cloud Practitioner',
 		issuer: 'Amazon Web Services',
-		dateEarned: '2023-01-01',
+		dateEarned: '2025-01-19',
+		expirationDate: '2029-01-03',
 		credentialUrl:
 			'https://www.credly.com/badges/860e8cd7-f269-44bd-8dea-ec24c0a6cf9f/linked_in_profile',
 		sortOrder: 2,
@@ -310,7 +312,8 @@ export const certifications: Certification[] = [
 	{
 		name: 'CompTIA Security+',
 		issuer: 'CompTIA',
-		dateEarned: '2022-01-01',
+		dateEarned: '2022-05-19',
+		expirationDate: '2028-05-19',
 		credentialUrl:
 			'https://www.credly.com/badges/17473cea-93af-4f71-92fd-b0267d576315/linked_in_profile',
 		sortOrder: 3,
@@ -318,7 +321,7 @@ export const certifications: Certification[] = [
 	{
 		name: 'CompTIA Server+',
 		issuer: 'CompTIA',
-		dateEarned: '2022-01-01',
+		dateEarned: '2025-02-24',
 		credentialUrl:
 			'https://www.credly.com/badges/84b29b64-74a7-451d-abde-5426fcbda0a0/linked_in_profile',
 		sortOrder: 4,
@@ -326,14 +329,14 @@ export const certifications: Certification[] = [
 	{
 		name: 'Linux Essentials',
 		issuer: 'Linux Professional Institute',
-		dateEarned: '2022-01-01',
+		dateEarned: '2024-02-13',
 		credentialUrl: 'https://cs.lpi.org/caf/Xamman/certification/verify/LPI000600576/fc6gttqhmk',
 		sortOrder: 5,
 	},
 	{
 		name: 'Blue Team Level 1',
 		issuer: 'Security Blue Team',
-		dateEarned: '2023-01-01',
+		dateEarned: '2025-01-15',
 		credentialUrl:
 			'https://www.credly.com/badges/1bc79be5-706b-4b60-9899-3788e42372c2/linked_in_profile',
 		sortOrder: 6,
