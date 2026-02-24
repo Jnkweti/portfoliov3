@@ -55,6 +55,7 @@ import Layout from '../layouts/Layout.astro';
 							name="name"
 							type="text"
 							required
+							maxlength="80"
 							class="w-full rounded-lg border border-white/15 bg-slate-950/70 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none"
 							placeholder="Your name"
 						/>
@@ -66,6 +67,7 @@ import Layout from '../layouts/Layout.astro';
 							name="email"
 							type="email"
 							required
+							maxlength="120"
 							class="w-full rounded-lg border border-white/15 bg-slate-950/70 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none"
 							placeholder="you@example.com"
 						/>
@@ -77,6 +79,7 @@ import Layout from '../layouts/Layout.astro';
 							name="subject"
 							type="text"
 							required
+							maxlength="120"
 							class="w-full rounded-lg border border-white/15 bg-slate-950/70 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none"
 							placeholder="What's this about?"
 						/>
@@ -88,6 +91,8 @@ import Layout from '../layouts/Layout.astro';
 							name="phone"
 							type="tel"
 							required
+							maxlength="32"
+							pattern="[0-9+().\-\s]{7,32}"
 							class="w-full rounded-lg border border-white/15 bg-slate-950/70 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none"
 							placeholder="+1 (555) 000-0000"
 						/>
@@ -99,9 +104,14 @@ import Layout from '../layouts/Layout.astro';
 							name="message"
 							required
 							rows="5"
+							maxlength="2000"
 							class="w-full rounded-lg border border-white/15 bg-slate-950/70 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none"
 							placeholder="Tell me what you're thinking..."
 						></textarea>
+					</div>
+					<div class="hidden" aria-hidden="true">
+						<label for="website">Website</label>
+						<input id="website" name="website" type="text" tabindex="-1" autocomplete="off" />
 					</div>
 					<div class="flex flex-wrap items-center gap-3">
 						<button type="submit" class="glow-btn">Send Message</button>
@@ -115,6 +125,17 @@ import Layout from '../layouts/Layout.astro';
 	<script is:inline>
 		const form = document.getElementById('contact-form');
 		const status = document.getElementById('contact-status');
+		const cleanSingleLine = (value, maxLength) =>
+			String(value)
+				.replace(/[\r\n]+/g, ' ')
+				.replace(/\s{2,}/g, ' ')
+				.trim()
+				.slice(0, maxLength);
+		const cleanMultiLine = (value, maxLength) =>
+			String(value)
+				.replace(/\u0000/g, '')
+				.trim()
+				.slice(0, maxLength);
 
 		if (form && status) {
 			form.addEventListener('submit', (event) => {
@@ -127,11 +148,18 @@ import Layout from '../layouts/Layout.astro';
 					return;
 				}
 
-				const name = document.getElementById('name').value.trim();
-				const email = document.getElementById('email').value.trim();
-				const subject = document.getElementById('subject').value.trim();
-				const phone = document.getElementById('phone').value.trim();
-				const message = document.getElementById('message').value.trim();
+				const websiteTrap = document.getElementById('website').value;
+				if (websiteTrap) {
+					status.textContent = 'Unable to process request.';
+					status.className = 'text-xs text-red-300';
+					return;
+				}
+
+				const name = cleanSingleLine(document.getElementById('name').value, 80);
+				const email = cleanSingleLine(document.getElementById('email').value, 120);
+				const subject = cleanSingleLine(document.getElementById('subject').value, 120);
+				const phone = cleanSingleLine(document.getElementById('phone').value, 32);
+				const message = cleanMultiLine(document.getElementById('message').value, 2000);
 
 				const body = [
 					`Name: ${name}`,
