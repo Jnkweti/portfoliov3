@@ -28,6 +28,9 @@ pnpm-debug.log*
 # test / coverage output
 coverage/
 
+# github workflows
+.github/workflows/deploy-github-pages.yml
+
 # macOS-specific files
 .DS_Store
 
