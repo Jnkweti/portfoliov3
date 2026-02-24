@@ -7,6 +7,12 @@ dist/
 # dependencies
 node_modules/
 
+# editor settings
+.vscode/
+
+# local notes
+todo.md
+
 # logs
 npm-debug.log*
 yarn-debug.log*
@@ -16,9 +22,19 @@ pnpm-debug.log*
 # environment variables
 .env
 .env.production
+.env.local
+.env.*.local
+
+# test / coverage output
+coverage/
 
 # macOS-specific files
 .DS_Store
 
 # jetbrains setting folder
 .idea/
+
+# temporary files
+*.swp
+*.swo
+*.tmp

@@ -1,0 +1,44 @@
+---
+import { experiences, formatMonthYear } from '../data/portfolio';
+import Layout from '../layouts/Layout.astro';
+
+const sortedExperiences = [...experiences].sort((a, b) => a.sortOrder - b.sortOrder);
+---
+
+<Layout title="Experience | Joshua Nkweti-Nyong" description="Professional experience timeline">
+	<section class="page-shell">
+		<header class="page-header" data-reveal>
+			<h1 class="section-title gradient-heading">Experience</h1>
+			<p class="subtle-text max-w-2xl">
+				Professional timeline across systems engineering, cybersecurity, platform engineering, and
+				AI infrastructure delivery.
+			</p>
+		</header>
+
+		<div class="relative space-y-8 border-l-2 border-sky-500/30 pl-8" data-reveal>
+			{
+				sortedExperiences.map((experience) => (
+					<article class="glass-card timeline-card relative p-6" data-reveal data-tilt>
+						<div class="absolute -left-[2.2rem] top-8 h-3.5 w-3.5 rounded-full bg-sky-400 ring-4 ring-slate-950"></div>
+						<h2 class="text-xl font-semibold text-white">{experience.role}</h2>
+						<p class="mt-1 text-sm text-sky-300">{experience.company}</p>
+						<p class="mt-1 text-xs text-slate-500">
+							{formatMonthYear(experience.startDate)} - {experience.endDate ? formatMonthYear(experience.endDate) : 'Present'}
+						</p>
+
+						<ul class="mt-4 space-y-2 text-sm leading-relaxed text-slate-300">
+							{
+								experience.description.map((line) => (
+									<li class="flex gap-2">
+										<span class="mt-0.5 text-sky-400">&gt;</span>
+										<span>{line}</span>
+									</li>
+								))
+							}
+						</ul>
+					</article>
+				))
+			}
+		</div>
+	</section>
+</Layout>

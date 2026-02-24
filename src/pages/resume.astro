@@ -1,0 +1,62 @@
+---
+import { coreCompetencies } from '../data/portfolio';
+import Layout from '../layouts/Layout.astro';
+import { withBase } from '../lib/site';
+---
+
+<Layout title="Resume | Joshua Nkweti-Nyong" description="Resume download and professional highlights">
+	<section class="page-shell space-y-10">
+		<header class="page-header" data-reveal>
+			<h1 class="section-title gradient-heading">Resume</h1>
+			<p class="subtle-text">Download my full resume or review highlights below.</p>
+		</header>
+
+		<div class="glass-card p-8 md:p-10" data-reveal data-tilt>
+			<div class="flex flex-col gap-6 sm:flex-row sm:items-center sm:justify-between">
+				<div>
+					<h2 class="text-2xl font-semibold text-white">Joshua Nkweti-Nyong</h2>
+					<p class="mt-1 text-sm text-slate-400">Development | Cloud | AI Engineering</p>
+					<div class="mt-3 flex flex-wrap gap-2">
+						<span class="role-badge">TS/SCI Cleared</span>
+						<span class="role-badge">Air Force Veteran</span>
+						<span class="role-badge">Available Remotely</span>
+					</div>
+				</div>
+
+				<a href={withBase('assets/Joshua-Nkweti-Nyong-Resume.docx')} download class="glow-btn">
+					Download .docx
+				</a>
+			</div>
+		</div>
+
+		<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+			<div class="stat-card" data-reveal data-tilt>
+				<p class="text-3xl font-bold text-sky-300">4+</p>
+				<p class="mt-2 text-xs uppercase tracking-widest text-slate-500">Years Experience</p>
+			</div>
+			<div class="stat-card" data-reveal data-tilt>
+				<p class="text-3xl font-bold text-sky-300">8</p>
+				<p class="mt-2 text-xs uppercase tracking-widest text-slate-500">Certifications</p>
+			</div>
+			<div class="stat-card" data-reveal data-tilt>
+				<p class="text-2xl font-bold text-sky-300">TS/SCI</p>
+				<p class="mt-2 text-xs uppercase tracking-widest text-slate-500">Clearance</p>
+			</div>
+			<div class="stat-card" data-reveal data-tilt>
+				<p class="text-2xl font-bold text-sky-300">USAF</p>
+				<p class="mt-2 text-xs uppercase tracking-widest text-slate-500">Veteran</p>
+			</div>
+		</div>
+
+		<div class="glass-card p-6" data-reveal data-tilt>
+			<h2 class="text-sm font-semibold uppercase tracking-widest text-slate-400">Core Competencies</h2>
+			<div class="mt-4 flex flex-wrap gap-2">
+				{
+					coreCompetencies.map((competency) => (
+						<span class="role-badge">{competency}</span>
+					))
+				}
+			</div>
+		</div>
+	</section>
+</Layout>

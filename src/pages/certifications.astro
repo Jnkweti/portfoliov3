@@ -1,0 +1,70 @@
+---
+import { certifications, formatMonthYear } from '../data/portfolio';
+import Layout from '../layouts/Layout.astro';
+
+const sortedCertifications = [...certifications].sort((a, b) => a.sortOrder - b.sortOrder);
+---
+
+<Layout title="Certifications | Joshua Nkweti-Nyong" description="Cloud, security, and infrastructure certifications">
+	<section class="page-shell space-y-10">
+		<header class="page-header" data-reveal>
+			<h1 class="section-title gradient-heading">Certifications</h1>
+			<p class="subtle-text max-w-2xl">Industry certifications across cloud, security, and infrastructure.</p>
+		</header>
+
+		<div class="grid gap-4 sm:grid-cols-3">
+			<div class="stat-card" data-reveal data-tilt>
+				<p class="text-3xl font-bold text-sky-300">{sortedCertifications.length}</p>
+				<p class="mt-2 text-xs uppercase tracking-widest text-slate-500">Certifications</p>
+			</div>
+			<div class="stat-card" data-reveal data-tilt>
+				<p class="text-2xl font-bold text-sky-300">Active</p>
+				<p class="mt-2 text-xs uppercase tracking-widest text-slate-500">Status</p>
+			</div>
+			<div class="stat-card" data-reveal data-tilt>
+				<p class="text-2xl font-bold text-sky-300">TS/SCI</p>
+				<p class="mt-2 text-xs uppercase tracking-widest text-slate-500">Clearance</p>
+			</div>
+		</div>
+
+		<div class="grid gap-4 sm:grid-cols-2">
+			{
+				sortedCertifications.map((certification) => (
+					<article class="glass-card cert-card flex h-full flex-col gap-3 p-5" data-reveal data-tilt>
+						<div>
+							<h2 class="text-base font-semibold text-white">{certification.name}</h2>
+							<p class="mt-1 text-sm text-sky-300">{certification.issuer}</p>
+						</div>
+
+						<div class="text-xs text-slate-400">
+							<span>Earned {formatMonthYear(certification.dateEarned)}</span>
+							{certification.expirationDate ? (
+								<span> | Expires {formatMonthYear(certification.expirationDate)}</span>
+							) : (
+								<span class="text-emerald-300/90"> | No expiry</span>
+							)}
+						</div>
+
+						{(certification.credentialId || certification.credentialUrl) && (
+							<div class="mt-auto flex flex-wrap items-center gap-3">
+								{certification.credentialId && (
+									<span class="text-xs text-slate-400">ID: <span class="font-mono text-slate-200">{certification.credentialId}</span></span>
+								)}
+								{certification.credentialUrl && (
+									<a
+										href={certification.credentialUrl}
+										target="_blank"
+										rel="noopener noreferrer"
+										class="text-xs font-medium text-slate-300 transition-colors hover:text-sky-300"
+									>
+										View credential
+									</a>
+								)}
+							</div>
+						)}
+					</article>
+				))
+			}
+		</div>
+	</section>
+</Layout>

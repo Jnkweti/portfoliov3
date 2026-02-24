@@ -1,0 +1,77 @@
+---
+import type { GetStaticPaths } from 'astro';
+import { projects } from '../../data/portfolio';
+import Layout from '../../layouts/Layout.astro';
+import { withBase } from '../../lib/site';
+
+export const getStaticPaths: GetStaticPaths = async () => {
+	return projects.map((project) => ({
+		params: { id: String(project.id) },
+		props: { project },
+	}));
+};
+
+const { project } = Astro.props;
+const descriptionParts = String(project.description).split('\n\n');
+---
+
+<Layout
+	title={`${project.title} | Projects`}
+	description={project.summary}
+>
+	<section class="page-shell">
+		<a class="outline-btn" href={withBase('projects/')} data-reveal>Back to Projects</a>
+
+		<article class="glass-card detail-panel mt-6 space-y-6 p-7 md:p-9" data-reveal data-tilt>
+			<header class="space-y-3">
+				<div class="flex flex-wrap gap-2">
+					{
+						project.tags.map((tag: string) => (
+							<span class="rounded-full border border-white/20 bg-slate-900/80 px-3 py-1 text-xs text-slate-300">
+								{tag}
+							</span>
+						))
+					}
+				</div>
+				<h1 class="text-3xl font-bold gradient-heading md:text-4xl">{project.title}</h1>
+				<p class="subtle-text">{project.summary}</p>
+			</header>
+
+			<div class="space-y-4">
+				{
+					descriptionParts.map((part: string) => (
+						<p class="subtle-text whitespace-pre-line">{part}</p>
+					))
+				}
+			</div>
+
+			<div class="space-y-3">
+				<h2 class="text-sm font-semibold uppercase tracking-wider text-slate-400">Tech Stack</h2>
+				<div class="flex flex-wrap gap-2">
+					{
+						project.techStack.map((tech: string) => (
+							<span class="rounded-full border border-sky-500/30 bg-sky-500/10 px-3 py-1 text-xs text-sky-200">
+								{tech}
+							</span>
+						))
+					}
+				</div>
+			</div>
+
+			{(project.repoUrl || project.liveUrl) && (
+				<div class="flex flex-wrap gap-3">
+					{project.repoUrl && (
+						<a class="outline-btn" href={project.repoUrl} target="_blank" rel="noopener noreferrer">
+							View Repository
+						</a>
+					)}
+					{project.liveUrl && (
+						<a class="glow-btn" href={project.liveUrl} target="_blank" rel="noopener noreferrer">
+							Live Demo
+						</a>
+					)}
+				</div>
+			)}
+		</article>
+	</section>
+</Layout>

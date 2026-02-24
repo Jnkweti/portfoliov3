@@ -1,0 +1,17 @@
+---
+import Layout from '../layouts/Layout.astro';
+import { withBase } from '../lib/site';
+---
+
+<Layout title="404 | Page Not Found" description="The requested page could not be found">
+	<section class="page-shell">
+		<div class="glass-card mx-auto max-w-3xl px-8 py-14 text-center" data-reveal data-tilt>
+			<p class="text-6xl font-bold text-sky-300">404</p>
+			<h1 class="mt-4 text-3xl font-semibold text-white">Page Not Found</h1>
+			<p class="mx-auto mt-3 max-w-xl text-slate-400">
+				The page you are looking for doesn't exist or has been moved.
+			</p>
+			<a href={withBase('')} class="glow-btn mt-8">Go Home</a>
+		</div>
+	</section>
+</Layout>

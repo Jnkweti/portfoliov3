@@ -1,0 +1,141 @@
+---
+import { getGroupedSkills } from '../data/portfolio';
+import Layout from '../layouts/Layout.astro';
+
+const groupedSkills = getGroupedSkills();
+---
+
+<Layout title="Skills | Joshua Nkweti-Nyong" description="Technical skills across DevSecOps, security, cloud, and AI">
+	<section class="page-shell">
+		<header class="page-header" data-reveal>
+			<h1 class="section-title gradient-heading">Skills & Expertise</h1>
+			<p class="subtle-text max-w-3xl">
+				4+ years securing, automating, and maintaining enterprise-scale infrastructure across cloud
+				and on-prem environments. Focused on DevSecOps, cloud architecture, and AI integration.
+			</p>
+		</header>
+
+		<div class="mb-10 flex flex-wrap gap-2" id="skills-filter-bar" data-reveal>
+			<button type="button" class="filter-button role-badge" data-category="all">All</button>
+			{
+				groupedSkills.map((group) => (
+					<button
+						type="button"
+						class="filter-button role-badge border-white/20 bg-slate-900/60 text-slate-300"
+						data-category={group.category}
+					>
+						{group.category}
+					</button>
+				))
+			}
+		</div>
+
+		<div class="space-y-12" id="skills-groups">
+			{
+				groupedSkills.map((group) => (
+					<section data-skill-group={group.category} class="space-y-4">
+						<h2 class="flex items-center gap-3 text-xl font-semibold text-white">
+							<span class="h-px w-10 bg-sky-400"></span>
+							{group.category}
+						</h2>
+						<div class="grid gap-4 sm:grid-cols-2 lg:grid-cols-3">
+							{
+								group.items.map((skill) => (
+									<article class="glass-card skill-card p-4" data-reveal data-tilt>
+										<div class="mb-3 flex items-center justify-between">
+											<span class="text-sm font-medium text-slate-100">{skill.name}</span>
+											<div class="flex gap-1">
+												{
+													Array.from({ length: 5 }).map((_, index) => (
+														<span
+															class={index < skill.proficiency
+																? 'h-1.5 w-1.5 rounded-full bg-sky-400'
+																: 'h-1.5 w-1.5 rounded-full bg-slate-700'}
+														></span>
+													))
+												}
+											</div>
+										</div>
+										<div class="h-1 w-full rounded-full bg-slate-800/90">
+											<div
+												class="skill-meter-fill h-1 rounded-full bg-gradient-to-r from-sky-700 to-sky-400"
+												data-level={String(skill.proficiency * 20)}
+											></div>
+										</div>
+									</article>
+								))
+							}
+						</div>
+					</section>
+				))
+			}
+		</div>
+	</section>
+
+	<script is:inline>
+		const filterButtons = Array.from(document.querySelectorAll('.filter-button'));
+		const groups = Array.from(document.querySelectorAll('[data-skill-group]'));
+		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+
+		function animateMeters(scope) {
+			const meters = scope.querySelectorAll('.skill-meter-fill');
+			meters.forEach((meter) => {
+				const target = Number(meter.getAttribute('data-level') || '0');
+				if (reducedMotion) {
+					meter.style.width = `${target}%`;
+					return;
+				}
+
+				meter.style.width = '0%';
+				requestAnimationFrame(() => {
+					meter.style.width = `${target}%`;
+				});
+			});
+		}
+
+		function applyFilter(category) {
+			groups.forEach((group) => {
+				const groupCategory = group.getAttribute('data-skill-group');
+				const shouldShow = category === 'all' || groupCategory === category;
+				if (shouldShow) {
+					const wasHidden = group.classList.contains('hidden');
+					group.classList.remove('hidden');
+
+					if (wasHidden && !reducedMotion) {
+						group.animate(
+							[
+								{ opacity: 0, transform: 'translateY(12px)' },
+								{ opacity: 1, transform: 'translateY(0px)' },
+							],
+							{ duration: 280, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
+						);
+					}
+
+					animateMeters(group);
+				} else {
+					group.classList.add('hidden');
+				}
+			});
+
+			filterButtons.forEach((button) => {
+				const isActive = button.getAttribute('data-category') === category;
+				button.classList.toggle('border-sky-400/30', isActive);
+				button.classList.toggle('bg-sky-500/10', isActive);
+				button.classList.toggle('text-sky-200', isActive);
+				button.classList.toggle('border-white/20', !isActive);
+				button.classList.toggle('bg-slate-900/60', !isActive);
+				button.classList.toggle('text-slate-300', !isActive);
+				button.setAttribute('aria-pressed', String(isActive));
+			});
+		}
+
+		filterButtons.forEach((button) => {
+			button.addEventListener('click', () => {
+				const category = button.getAttribute('data-category') || 'all';
+				applyFilter(category);
+			});
+		});
+
+		applyFilter('all');
+	</script>
+</Layout>

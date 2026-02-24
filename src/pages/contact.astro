@@ -1,0 +1,151 @@
+---
+import Layout from '../layouts/Layout.astro';
+---
+
+<Layout title="Contact | Joshua Nkweti-Nyong" description="Get in touch with Joshua Nkweti-Nyong">
+	<section class="page-shell space-y-10">
+		<header class="page-header" data-reveal>
+			<h1 class="section-title gradient-heading">Contact</h1>
+			<p class="subtle-text">Have a question or want to collaborate? Send me a message.</p>
+		</header>
+
+		<div class="grid items-start gap-6 md:grid-cols-[1fr_1.6fr]">
+			<div class="space-y-4">
+				<div class="glass-card p-5" data-reveal data-tilt>
+					<p class="text-xs uppercase tracking-wider text-slate-500">Email</p>
+					<p class="mt-2 text-sm text-slate-200">joshuanyong02@gmail.com</p>
+				</div>
+				<div class="glass-card p-5" data-reveal data-tilt>
+					<p class="text-xs uppercase tracking-wider text-slate-500">Location</p>
+					<p class="mt-2 text-sm text-slate-200">Alexandria, VA | Remote Ready</p>
+				</div>
+				<div class="glass-card p-5" data-reveal data-tilt>
+					<p class="text-xs uppercase tracking-wider text-slate-500">Response Time</p>
+					<p class="mt-2 text-sm text-slate-200">Typically within 24 hours</p>
+				</div>
+				<div class="glass-card p-5" data-reveal data-tilt>
+					<p class="text-xs uppercase tracking-wider text-slate-500">Socials</p>
+					<div class="mt-2 flex gap-4 text-sm">
+						<a
+							class="text-slate-300 transition-colors hover:text-sky-300"
+							href="https://github.com/Jnkweti"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							GitHub
+						</a>
+						<a
+							class="text-slate-300 transition-colors hover:text-sky-300"
+							href="https://www.linkedin.com/in/joshua-n-52064b212"
+							target="_blank"
+							rel="noopener noreferrer"
+						>
+							LinkedIn
+						</a>
+					</div>
+				</div>
+			</div>
+
+			<div class="glass-card p-6 md:p-7" data-reveal data-tilt>
+				<form id="contact-form" class="space-y-4">
+					<div>
+						<label for="name" class="mb-1 block text-sm text-slate-300">Name</label>
+						<input
+							id="name"
+							name="name"
+							type="text"
+							required
+							class="w-full rounded-lg border border-white/15 bg-slate-950/70 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none"
+							placeholder="Your name"
+						/>
+					</div>
+					<div>
+						<label for="email" class="mb-1 block text-sm text-slate-300">Email</label>
+						<input
+							id="email"
+							name="email"
+							type="email"
+							required
+							class="w-full rounded-lg border border-white/15 bg-slate-950/70 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none"
+							placeholder="you@example.com"
+						/>
+					</div>
+					<div>
+						<label for="subject" class="mb-1 block text-sm text-slate-300">Subject</label>
+						<input
+							id="subject"
+							name="subject"
+							type="text"
+							required
+							class="w-full rounded-lg border border-white/15 bg-slate-950/70 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none"
+							placeholder="What's this about?"
+						/>
+					</div>
+					<div>
+						<label for="phone" class="mb-1 block text-sm text-slate-300">Phone</label>
+						<input
+							id="phone"
+							name="phone"
+							type="tel"
+							required
+							class="w-full rounded-lg border border-white/15 bg-slate-950/70 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none"
+							placeholder="+1 (555) 000-0000"
+						/>
+					</div>
+					<div>
+						<label for="message" class="mb-1 block text-sm text-slate-300">Message</label>
+						<textarea
+							id="message"
+							name="message"
+							required
+							rows="5"
+							class="w-full rounded-lg border border-white/15 bg-slate-950/70 px-3 py-2 text-sm text-white placeholder:text-slate-500 focus:border-sky-500 focus:outline-none"
+							placeholder="Tell me what you're thinking..."
+						></textarea>
+					</div>
+					<div class="flex flex-wrap items-center gap-3">
+						<button type="submit" class="glow-btn">Send Message</button>
+						<span id="contact-status" class="text-xs text-slate-400"></span>
+					</div>
+				</form>
+			</div>
+		</div>
+	</section>
+
+	<script is:inline>
+		const form = document.getElementById('contact-form');
+		const status = document.getElementById('contact-status');
+
+		if (form && status) {
+			form.addEventListener('submit', (event) => {
+				event.preventDefault();
+
+				if (!form.checkValidity()) {
+					form.reportValidity();
+					status.textContent = 'Please fix validation errors before submitting.';
+					status.className = 'text-xs text-red-300';
+					return;
+				}
+
+				const name = document.getElementById('name').value.trim();
+				const email = document.getElementById('email').value.trim();
+				const subject = document.getElementById('subject').value.trim();
+				const phone = document.getElementById('phone').value.trim();
+				const message = document.getElementById('message').value.trim();
+
+				const body = [
+					`Name: ${name}`,
+					`Email: ${email}`,
+					`Phone: ${phone}`,
+					'',
+					message,
+				].join('\n');
+
+				const mailto = `mailto:joshuanyong02@gmail.com?subject=${encodeURIComponent(subject)}&body=${encodeURIComponent(body)}`;
+				status.textContent = 'Opening your email client...';
+				status.className = 'text-xs text-emerald-300';
+				window.location.href = mailto;
+			});
+		}
+	</script>
+</Layout>
