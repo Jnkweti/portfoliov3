@@ -106,124 +106,126 @@ const currentPath = currentPathWithoutBase(Astro.url.pathname);
 		</div>
 
 		<script is:inline>
-			const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
-			const revealObserverMargin = '0px 0px -10% 0px';
+			(() => {
+				const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+				const revealObserverMargin = '0px 0px -10% 0px';
 
-			function initMobileNav() {
-				const toggle = document.getElementById('mobile-nav-toggle');
-				const nav = document.getElementById('site-nav');
-				if (!toggle || !nav || toggle.dataset.bound === 'true') return;
+				function initMobileNav() {
+					const toggle = document.getElementById('mobile-nav-toggle');
+					const nav = document.getElementById('site-nav');
+					if (!toggle || !nav || toggle.dataset.bound === 'true') return;
 
-				toggle.dataset.bound = 'true';
+					toggle.dataset.bound = 'true';
 
-				const setExpanded = (expanded) => {
-					toggle.setAttribute('aria-expanded', String(expanded));
-					nav.classList.toggle('hidden', !expanded);
-				};
-
-				setExpanded(false);
-
-				toggle.addEventListener('click', () => {
-					const expanded = toggle.getAttribute('aria-expanded') === 'true';
-					setExpanded(!expanded);
-				});
-
-				nav.querySelectorAll('a').forEach((link) => {
-					link.addEventListener('click', () => {
-						if (window.innerWidth < 768) {
-							setExpanded(false);
-						}
-					});
-				});
-			}
-
-			function initPointerGlow() {
-				if (reducedMotion || document.documentElement.dataset.pointerGlowBound === 'true') return;
-
-				document.documentElement.dataset.pointerGlowBound = 'true';
-				window.addEventListener(
-					'pointermove',
-					(event) => {
-						const x = (event.clientX / window.innerWidth) * 100;
-						const y = (event.clientY / window.innerHeight) * 100;
-						document.body.style.setProperty('--pointer-x', `${x.toFixed(2)}%`);
-						document.body.style.setProperty('--pointer-y', `${y.toFixed(2)}%`);
-					},
-					{ passive: true }
-				);
-			}
-
-			function initScrollReveal() {
-				const revealNodes = Array.from(document.querySelectorAll('[data-reveal]'));
-				revealNodes.forEach((node, index) => {
-					if (!node.style.getPropertyValue('--reveal-delay')) {
-						node.style.setProperty('--reveal-delay', `${Math.min(index * 65, 420)}ms`);
-					}
-				});
-
-				if (reducedMotion || !('IntersectionObserver' in window)) {
-					revealNodes.forEach((node) => node.classList.add('is-visible'));
-					return;
-				}
-
-				const observer = new IntersectionObserver(
-					(entries, instance) => {
-						entries.forEach((entry) => {
-							if (entry.isIntersecting) {
-								entry.target.classList.add('is-visible');
-								instance.unobserve(entry.target);
-							}
-						});
-					},
-					{ threshold: 0.15, rootMargin: revealObserverMargin }
-				);
-
-				revealNodes.forEach((node) => observer.observe(node));
-			}
-
-			function initTiltCards() {
-				const cards = document.querySelectorAll('[data-tilt]');
-				cards.forEach((card) => {
-					if (card.dataset.tiltBound === 'true') return;
-					card.dataset.tiltBound = 'true';
-
-					const resetTilt = () => {
-						card.classList.remove('is-tilting');
-						card.style.setProperty('--tilt-x', '0deg');
-						card.style.setProperty('--tilt-y', '0deg');
-						card.style.setProperty('--glow-x', '50%');
-						card.style.setProperty('--glow-y', '50%');
+					const setExpanded = (expanded) => {
+						toggle.setAttribute('aria-expanded', String(expanded));
+						nav.classList.toggle('hidden', !expanded);
 					};
 
-					card.addEventListener('pointermove', (event) => {
-						if (reducedMotion || event.pointerType === 'touch') return;
+					setExpanded(false);
 
-						const rect = card.getBoundingClientRect();
-						const relativeX = (event.clientX - rect.left) / rect.width;
-						const relativeY = (event.clientY - rect.top) / rect.height;
-						const rotateX = (0.5 - relativeY) * 7;
-						const rotateY = (relativeX - 0.5) * 7;
-
-						card.classList.add('is-tilting');
-						card.style.setProperty('--tilt-x', `${rotateX.toFixed(2)}deg`);
-						card.style.setProperty('--tilt-y', `${rotateY.toFixed(2)}deg`);
-						card.style.setProperty('--glow-x', `${(relativeX * 100).toFixed(2)}%`);
-						card.style.setProperty('--glow-y', `${(relativeY * 100).toFixed(2)}%`);
+					toggle.addEventListener('click', () => {
+						const expanded = toggle.getAttribute('aria-expanded') === 'true';
+						setExpanded(!expanded);
 					});
 
-					card.addEventListener('pointerleave', resetTilt);
-					card.addEventListener('blur', resetTilt);
-				});
-			}
+					nav.querySelectorAll('a').forEach((link) => {
+						link.addEventListener('click', () => {
+							if (window.innerWidth < 768) {
+								setExpanded(false);
+							}
+						});
+					});
+				}
 
-			function initInteractions() {
-				initMobileNav();
-				initPointerGlow();
-				initScrollReveal();
-				initTiltCards();
-			}
+				function initPointerGlow() {
+					if (reducedMotion || document.documentElement.dataset.pointerGlowBound === 'true') return;
 
-			initInteractions();
+					document.documentElement.dataset.pointerGlowBound = 'true';
+					window.addEventListener(
+						'pointermove',
+						(event) => {
+							const x = (event.clientX / window.innerWidth) * 100;
+							const y = (event.clientY / window.innerHeight) * 100;
+							document.body.style.setProperty('--pointer-x', `${x.toFixed(2)}%`);
+							document.body.style.setProperty('--pointer-y', `${y.toFixed(2)}%`);
+						},
+						{ passive: true }
+					);
+				}
+
+				function initScrollReveal() {
+					const revealNodes = Array.from(document.querySelectorAll('[data-reveal]'));
+					revealNodes.forEach((node, index) => {
+						if (!node.style.getPropertyValue('--reveal-delay')) {
+							node.style.setProperty('--reveal-delay', `${Math.min(index * 65, 420)}ms`);
+						}
+					});
+
+					if (reducedMotion || !('IntersectionObserver' in window)) {
+						revealNodes.forEach((node) => node.classList.add('is-visible'));
+						return;
+					}
+
+					const observer = new IntersectionObserver(
+						(entries, instance) => {
+							entries.forEach((entry) => {
+								if (entry.isIntersecting) {
+									entry.target.classList.add('is-visible');
+									instance.unobserve(entry.target);
+								}
+							});
+						},
+						{ threshold: 0.15, rootMargin: revealObserverMargin }
+					);
+
+					revealNodes.forEach((node) => observer.observe(node));
+				}
+
+				function initTiltCards() {
+					const cards = document.querySelectorAll('[data-tilt]');
+					cards.forEach((card) => {
+						if (card.dataset.tiltBound === 'true') return;
+						card.dataset.tiltBound = 'true';
+
+						const resetTilt = () => {
+							card.classList.remove('is-tilting');
+							card.style.setProperty('--tilt-x', '0deg');
+							card.style.setProperty('--tilt-y', '0deg');
+							card.style.setProperty('--glow-x', '50%');
+							card.style.setProperty('--glow-y', '50%');
+						};
+
+						card.addEventListener('pointermove', (event) => {
+							if (reducedMotion || event.pointerType === 'touch') return;
+
+							const rect = card.getBoundingClientRect();
+							const relativeX = (event.clientX - rect.left) / rect.width;
+							const relativeY = (event.clientY - rect.top) / rect.height;
+							const rotateX = (0.5 - relativeY) * 7;
+							const rotateY = (relativeX - 0.5) * 7;
+
+							card.classList.add('is-tilting');
+							card.style.setProperty('--tilt-x', `${rotateX.toFixed(2)}deg`);
+							card.style.setProperty('--tilt-y', `${rotateY.toFixed(2)}deg`);
+							card.style.setProperty('--glow-x', `${(relativeX * 100).toFixed(2)}%`);
+							card.style.setProperty('--glow-y', `${(relativeY * 100).toFixed(2)}%`);
+						});
+
+						card.addEventListener('pointerleave', resetTilt);
+						card.addEventListener('blur', resetTilt);
+					});
+				}
+
+				function initInteractions() {
+					initMobileNav();
+					initPointerGlow();
+					initScrollReveal();
+					initTiltCards();
+				}
+
+				initInteractions();
+			})();
 		</script>
 	</body>
 </html>

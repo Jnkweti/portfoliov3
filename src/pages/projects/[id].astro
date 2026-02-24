@@ -11,7 +11,7 @@ export const getStaticPaths: GetStaticPaths = async () => {
 	}));
 };
 
-const { project } = Astro.props;
+const { project } = Astro.props as { project: typeof projects[number] };
 const descriptionParts = String(project.description).split('\n\n');
 ---
 

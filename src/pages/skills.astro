@@ -73,69 +73,71 @@ const groupedSkills = getGroupedSkills();
 	</section>
 
 	<script is:inline>
-		const filterButtons = Array.from(document.querySelectorAll('.filter-button'));
-		const groups = Array.from(document.querySelectorAll('[data-skill-group]'));
-		const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
+		(() => {
+			const filterButtons = Array.from(document.querySelectorAll('.filter-button'));
+			const groups = Array.from(document.querySelectorAll('[data-skill-group]'));
+			const reducedMotion = window.matchMedia('(prefers-reduced-motion: reduce)').matches;
 
-		function animateMeters(scope) {
-			const meters = scope.querySelectorAll('.skill-meter-fill');
-			meters.forEach((meter) => {
-				const target = Number(meter.getAttribute('data-level') || '0');
-				if (reducedMotion) {
-					meter.style.width = `${target}%`;
-					return;
-				}
-
-				meter.style.width = '0%';
-				requestAnimationFrame(() => {
-					meter.style.width = `${target}%`;
-				});
-			});
-		}
-
-		function applyFilter(category) {
-			groups.forEach((group) => {
-				const groupCategory = group.getAttribute('data-skill-group');
-				const shouldShow = category === 'all' || groupCategory === category;
-				if (shouldShow) {
-					const wasHidden = group.classList.contains('hidden');
-					group.classList.remove('hidden');
-
-					if (wasHidden && !reducedMotion) {
-						group.animate(
-							[
-								{ opacity: 0, transform: 'translateY(12px)' },
-								{ opacity: 1, transform: 'translateY(0px)' },
-							],
-							{ duration: 280, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
-						);
+			function animateMeters(scope) {
+				const meters = scope.querySelectorAll('.skill-meter-fill');
+				meters.forEach((meter) => {
+					const target = Number(meter.getAttribute('data-level') || '0');
+					if (reducedMotion) {
+						meter.style.width = `${target}%`;
+						return;
 					}
 
-					animateMeters(group);
-				} else {
-					group.classList.add('hidden');
-				}
-			});
+					meter.style.width = '0%';
+					requestAnimationFrame(() => {
+						meter.style.width = `${target}%`;
+					});
+				});
+			}
+
+			function applyFilter(category) {
+				groups.forEach((group) => {
+					const groupCategory = group.getAttribute('data-skill-group');
+					const shouldShow = category === 'all' || groupCategory === category;
+					if (shouldShow) {
+						const wasHidden = group.classList.contains('hidden');
+						group.classList.remove('hidden');
+
+						if (wasHidden && !reducedMotion) {
+							group.animate(
+								[
+									{ opacity: 0, transform: 'translateY(12px)' },
+									{ opacity: 1, transform: 'translateY(0px)' },
+								],
+								{ duration: 280, easing: 'cubic-bezier(0.16, 1, 0.3, 1)' }
+							);
+						}
+
+						animateMeters(group);
+					} else {
+						group.classList.add('hidden');
+					}
+				});
+
+				filterButtons.forEach((button) => {
+					const isActive = button.getAttribute('data-category') === category;
+					button.classList.toggle('border-sky-400/30', isActive);
+					button.classList.toggle('bg-sky-500/10', isActive);
+					button.classList.toggle('text-sky-200', isActive);
+					button.classList.toggle('border-white/20', !isActive);
+					button.classList.toggle('bg-slate-900/60', !isActive);
+					button.classList.toggle('text-slate-300', !isActive);
+					button.setAttribute('aria-pressed', String(isActive));
+				});
+			}
 
 			filterButtons.forEach((button) => {
-				const isActive = button.getAttribute('data-category') === category;
-				button.classList.toggle('border-sky-400/30', isActive);
-				button.classList.toggle('bg-sky-500/10', isActive);
-				button.classList.toggle('text-sky-200', isActive);
-				button.classList.toggle('border-white/20', !isActive);
-				button.classList.toggle('bg-slate-900/60', !isActive);
-				button.classList.toggle('text-slate-300', !isActive);
-				button.setAttribute('aria-pressed', String(isActive));
+				button.addEventListener('click', () => {
+					const category = button.getAttribute('data-category') || 'all';
+					applyFilter(category);
+				});
 			});
-		}
 
-		filterButtons.forEach((button) => {
-			button.addEventListener('click', () => {
-				const category = button.getAttribute('data-category') || 'all';
-				applyFilter(category);
-			});
-		});
-
-		applyFilter('all');
+			applyFilter('all');
+		})();
 	</script>
 </Layout>
