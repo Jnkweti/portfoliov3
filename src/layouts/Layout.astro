@@ -124,6 +124,7 @@ const currentPath = currentPathWithoutBase(Astro.url.pathname);
 					const setExpanded = (expanded) => {
 						toggle.setAttribute('aria-expanded', String(expanded));
 						nav.classList.toggle('hidden', !expanded);
+						nav.classList.toggle('flex', expanded);
 					};
 
 					setExpanded(false);
