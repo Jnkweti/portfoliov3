@@ -23,17 +23,14 @@ I rebuilt it in Astro to keep it fast, clean, and easy to maintain without a bac
 - GitHub Pages for hosting
 - Custom domain via `CNAME` (`jnkweti.dev`)
 
-## Deploy flow
+## CI/CD workflows
 
-Workflow file: `.github/workflows/deploy-github-pages.yml`
+- `deploy-github-pages.yml` — dependency audit gate → build → upload `dist/` → deploy to GitHub Pages.
+- `ci.yml` — Astro type-check, build artifact, Lighthouse perf/a11y report, Gitleaks secret scan, dependency review on PRs.
+- `weekly-audit.yml` — Monday npm audit (high/critical) + `npm outdated` report.
+- `codeql.yml` — CodeQL SAST for JS/TS on push/PR and weekly schedule.
 
-```text
-push to main
-  -> install deps (npm ci)
-  -> build static site (npm run build)
-  -> upload dist/ artifact
-  -> deploy to GitHub Pages
-```
+Recommended branch protections: require `lint_typecheck`, `build`, `lighthouse`, `gitleaks`, `dependency_review` (PRs), `dependency-audit` (deploy workflow).
 
 ## Local dev
 
